@@ -1,0 +1,7 @@
+customer_id,email,country,revenue
+1,a@test.com,CZ,100
+2,b@test.com,CZ,200
+2,c@test.com,CZ,300
+3,bad-email,SK,-50
+4,,CZ,500
+5,email@tt.com,CZ,wrong_datatype

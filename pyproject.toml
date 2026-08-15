@@ -1,0 +1,24 @@
+[project]
+name = "ai-quality-mcp"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "ingxfm ingxfm", email = "user@email.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "mcp[cli]>=2.0.0",
+]
+
+[project.scripts]
+ai-quality-mcp = "ai_quality_mcp:main"
+
+[build-system]
+requires = ["uv_build>=0.12.4,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
