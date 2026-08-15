@@ -4,4 +4,4 @@ customer_id,email,country,revenue
 2,c@test.com,CZ,300
 3,bad-email,SK,-50
 4,,CZ,500
-5,email@tt.com,CZ,wrong_datatype
+5,email@tt.com,HA,wrong_data_type
