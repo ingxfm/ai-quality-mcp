@@ -34,24 +34,22 @@ async def call_mcp_tool(tool_name: str, tool_arguments: dict):
             return tool_result
 
 
-def test_check_value_accepts_valid_value():
+def test_get_schema_returns_response():
     tool_result = asyncio.run(
         call_mcp_tool(
-            "check_value",
-            {"value": 50},
+            "get_schema",
+            {},
         )
     )
-    assert tool_result.content[0].text == "Value 50 is valid"
 
+    assert tool_result.is_error is False
 
-def test_check_value_rejects_invalid_value():
-    tool_result = asyncio.run(
-        call_mcp_tool(
-            "check_value",
-            {"value": -1},
-        )
-    )
-    assert tool_result.is_error is True
+    response_text = tool_result.content[0].text
+
+    assert "customer_id" in response_text
+    assert "email" in response_text
+    assert "country" in response_text
+    assert "revenue" in response_text
 
 
 def test_pipeline_reports_controlled_failure():
@@ -62,3 +60,25 @@ def test_pipeline_reports_controlled_failure():
         )
     )
     assert tool_result.is_error is True
+
+
+def test_check_data_quality_detects_known_problems():
+    tool_result = asyncio.run(
+        call_mcp_tool(
+            "check_data_quality",
+            {},
+        )
+    )
+
+    assert tool_result.is_error is False
+
+    import json
+    response_data = json.loads(tool_result.content[0].text)
+
+    assert response_data["checks"]["duplicate_customer_ids"] == ["2"]
+    assert response_data["checks"]["invalid_emails"] == ["invalid-email", ""]
+    assert response_data["checks"]["missing_emails"] == ["4"]
+    assert response_data["checks"]["invalid_countries"] == ["XX"]
+    assert response_data["checks"]["invalid_revenue"] == ["5"]
+    assert response_data["checks"]["negative_revenue"] == ["3"]
+    assert response_data["row_count"] == 6

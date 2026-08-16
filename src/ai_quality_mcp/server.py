@@ -30,6 +30,7 @@ def check_data_quality() -> dict:
         customers = list(csv.DictReader(file))
 
     customer_ids = [row["customer_id"] for row in customers]
+
     duplicate_ids = {
         customer_id
         for customer_id in customer_ids

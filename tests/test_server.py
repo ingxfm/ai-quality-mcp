@@ -1,32 +1,58 @@
+from ai_quality_mcp.server import (
+    check_data_quality,
+    get_schema,
+    simulate_pipeline,
+)
 import pytest
 
-from ai_quality_mcp.server import check_value, simulate_pipeline
+def test_get_schema():
+    schema = get_schema()
+
+    assert schema["customer_id"] == "integer"
+    assert schema["email"] == "string"
+    assert schema["country"] == "string"
+    assert schema["revenue"] == "number"
 
 
-def test_check_value_success():
-    result = check_value(42)
+def test_data_quality_detects_duplicate_customer():
+    result = check_data_quality()
 
-    assert result == "Value 42 is valid"
-
-
-def test_check_value_rejects_negative():
-    with pytest.raises(ValueError, match="greater than or equal to 0"):
-        check_value(-1)
+    assert result["status"] == "FAILED"
+    assert result["checks"]["duplicate_customer_ids"] == ["2"]
 
 
-def test_check_value_rejects_value_above_100():
-    with pytest.raises(ValueError, match="less than or equal to 100"):
-        check_value(101)
+def test_data_quality_detects_invalid_email():
+    result = check_data_quality()
+
+    assert result["checks"]["invalid_emails"] == ["invalid-email",""]
+
+
+def test_data_quality_detects_missing_email():
+    result = check_data_quality()
+
+    assert result["checks"]["missing_emails"] == ["4"]
+
+
+def test_data_quality_detects_negative_revenue():
+    result = check_data_quality()
+
+    assert result["checks"]["negative_revenue"] == ["3"]
+
+
+def test_data_quality_detects_invalid_country():
+    result = check_data_quality()
+
+    assert result["checks"]["invalid_countries"] == ["XX"]
 
 
 def test_pipeline_success():
     result = simulate_pipeline("success")
 
-    assert result == "Pipeline completed successfully"
+    assert result == "Customer pipeline completed successfully"
 
 
 def test_pipeline_controlled_failure():
-    with pytest.raises(RuntimeError, match="Simulated pipeline failure"):
+    with pytest.raises(RuntimeError, match="Simulated customer pipeline failure"):
         simulate_pipeline("failure")
 
 
