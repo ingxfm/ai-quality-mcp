@@ -30,7 +30,7 @@ def create_model() -> OpenAIChatCompletionsModel:
     )
 
 
-async def main():
+async def run_quality_investigation() -> str:
     set_tracing_disabled(True)
 
     model = create_model()
@@ -61,7 +61,7 @@ Use tool results as evidence.
 When you finish:
 1. State whether the pipeline appears healthy.
 2. List every detected data-quality problem.
-3. Identify the affected customer IDs when available.
+3. Identify affected customer IDs when available.
 4. Recommend appropriate regression tests.
 """,
             model=model,
@@ -70,11 +70,17 @@ When you finish:
 
         result = await Runner.run(
             agent,
-            "Investigate the customer data pipeline and report any quality problems.",
+            "Investigate the customer data pipeline and report every data-quality problem you find.",
         )
 
-        print("\n=== AI QUALITY ENGINEER REPORT ===\n")
-        print(result.final_output)
+        return result.final_output
+
+
+async def main():
+    report = await run_quality_investigation()
+
+    print("\n=== AI QUALITY ENGINEER REPORT ===\n")
+    print(report)
 
 
 if __name__ == "__main__":

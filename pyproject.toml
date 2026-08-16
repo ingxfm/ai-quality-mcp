@@ -1,15 +1,17 @@
 [project]
 name = "ai-quality-mcp"
 version = "0.1.0"
-description = "Add your description here"
+description = "MCP server demo."
 readme = "README.md"
 authors = [
-    { name = "ingxfm ingxfm", email = "user@email.com" }
+    { name = "Freddy", email = "ingxfm" }
 ]
 requires-python = ">=3.14"
 dependencies = [
+    "fastapi>=0.141.1",
     "mcp[cli]>=2.0.0",
     "openai-agents>=0.21.0",
+    "uvicorn>=0.52.3",
 ]
 
 [project.scripts]
