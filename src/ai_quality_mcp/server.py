@@ -1,7 +1,18 @@
 import csv
-from pathlib import Path
+import logging
+import sys
 
+from pathlib import Path
 from mcp.server import MCPServer
+
+
+logging.basicConfig(
+    level=logging.INFO,
+    stream=sys.stderr,
+)
+
+
+logger = logging.getLogger(__name__)
 
 
 mcp = MCPServer("AI Quality Demo")
@@ -12,6 +23,7 @@ DATA_FILE = Path(__file__).resolve().parents[2] / "customers.csv"
 @mcp.tool()
 def get_schema() -> dict:
     """Return the expected schema for customer data."""
+    logger.info("MCP TOOL CALLED: get_schema")
     return {
         "customer_id": "integer",
         "email": "string",
@@ -26,6 +38,7 @@ def check_data_quality() -> dict:
     Check customer data for common quality problems.
     The AI agent calls this function.
     """
+    logger.info("MCP TOOL CALLED: check_data_quality")
     with DATA_FILE.open(newline="") as file:
         customers = list(csv.DictReader(file))
 
@@ -91,6 +104,7 @@ def check_data_quality() -> dict:
 @mcp.tool()
 def simulate_pipeline(status: str) -> str:
     """Simulate a customer-data pipeline result."""
+    logger.info("MCP TOOL CALLED: simulate_pipeline")
     if status not in {"success", "failure"}:
         raise ValueError("status must be 'success' or 'failure'")
 
