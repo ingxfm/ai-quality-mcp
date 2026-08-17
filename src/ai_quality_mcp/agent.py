@@ -68,8 +68,7 @@ async def run_quality_investigation() -> str:
             agent,
             "Investigate the customer data pipeline and report every data-quality problem you find.",
         )
-        # print(result.raw_responses)
-        ## TODO: change to get the model used, here.
+
         return result.final_output
 
 
