@@ -36,3 +36,14 @@ jobs:
           uv run pytest -v \
             tests/test_server.py \
             tests/test_mcp_protocol.py
+
+  docker-build:
+    name: Docker build
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Build Docker image
+        run: docker build -t ai-quality-mcp:ci .
