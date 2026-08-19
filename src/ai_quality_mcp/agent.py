@@ -59,6 +59,7 @@ async def run_quality_investigation() -> str:
             2. List every detected data-quality problem.
             3. Identify affected customer IDs when available.
             4. Recommend appropriate regression tests.
+            5. Use highlights and numbering for the important status and numbers. 
             """,
             model=model,
             mcp_servers=[mcp_server],

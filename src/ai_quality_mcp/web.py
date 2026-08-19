@@ -1,7 +1,8 @@
 from pathlib import Path
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 
+import asyncio
 import bleach
 import markdown
 
@@ -16,6 +17,10 @@ HTML_PAGE = (
 ).read_text()
 
 
+# Allow only one investigation to run at a time.
+investigation_lock = asyncio.Lock()
+
+
 @app.get("/", response_class=HTMLResponse)
 async def home():
     return HTML_PAGE
@@ -23,7 +28,20 @@ async def home():
 
 @app.post("/investigate")
 async def investigate():
-    report = await run_quality_investigation()
+    if investigation_lock.locked():
+        return JSONResponse(
+            status_code=409,
+            content={
+                "busy": True,
+                "message": (
+                    "An investigation is already running. "
+                    "Please wait for the previous response."
+                ),
+            },
+        )
+
+    async with investigation_lock:
+        report = await run_quality_investigation()
 
     html_report = markdown.markdown(
         report,
@@ -51,5 +69,7 @@ async def investigate():
     )
 
     return {
+        "busy": False,
         "report": safe_report,
+        "model": "openrouter/free",
     }
