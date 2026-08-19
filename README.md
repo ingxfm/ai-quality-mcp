@@ -84,6 +84,21 @@ uv run pytest tests/test_server.py tests/test_mcp_protocol.py
 # Run the LLM evaluation tests
 uv run pytest tests/test_agent_evaluation.py
 ```
+# Table for the position requirements
+| Job requirement               | Demo                                                             |
+| ----------------------------- |------------------------------------------------------------------|
+| AI-powered quality frameworks | AI investigation agent                                           |
+| Agentic development           | LLM → MCP tools                                                  |
+| Data validation               | Customer data quality checks                                     |
+| Automated testing             | pytest                                                           |
+| E2E testing                   | MCP protocol tests                                               |
+| AI evaluation                 | Agent evaluation tests                                           |
+| CI/CD                         | GitHub Actions                                                   |
+| Containerization              | Docker                                                           |
+| Observability                 | investigation status/report                                      |
+| Enterprise-style data quality | duplicate IDs, missing values, invalid records, revenue validation |
+
+
 # Limitations
 1. Might trigger more than one request, if press the investigate button quickly.
 2. Missing some error handling and locking many requests in both frontend and backend.
