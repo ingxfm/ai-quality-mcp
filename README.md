@@ -84,3 +84,6 @@ uv run pytest tests/test_server.py tests/test_mcp_protocol.py
 # Run the LLM evaluation tests
 uv run pytest tests/test_agent_evaluation.py
 ```
+# Limitations
+1. Might trigger more than one request, if press the investigate button quickly.
+2. Missing some error handling and locking many requests in both frontend and backend.
